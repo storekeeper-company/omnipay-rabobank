@@ -2,7 +2,7 @@
 
 namespace Omnipay\Rabobank\Message\Request;
 
-use Omnipay\Rabobank\Message\Response\StatusResponse;
+use Omnipay\Rabobank\Message\Response\PaymentBrandsResponse;
 
 class PaymentBrandsRequest extends AbstractRabobankRequest
 {
@@ -17,7 +17,7 @@ class PaymentBrandsRequest extends AbstractRabobankRequest
             $headers
         );
 
-        return $this->response = new StatusResponse($this, $response);
+        return $this->response = new PaymentBrandsResponse($this, $response);
     }
 
     public function getData()
