@@ -28,8 +28,10 @@ class PaymentBrand
      * @var string
      */
     public $status;
-
-    function isActive()
+    /**
+     * @return bool
+     */
+    public function isActive()
     {
         return $this->status === self::STATUS_ACTIVE;
     }
