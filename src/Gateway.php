@@ -4,8 +4,10 @@ namespace Omnipay\Rabobank;
 
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Rabobank\Message\Request\CompletePurchaseRequest;
+use Omnipay\Rabobank\Message\Request\PaymentBrandsRequest;
 use Omnipay\Rabobank\Message\Request\PurchaseRequest;
 use Omnipay\Rabobank\Message\Request\StatusRequest;
+use Omnipay\Rabobank\Message\Response\PaymentBrandsResponse;
 
 /**
  * Rabobank Gateway
@@ -132,6 +134,17 @@ class Gateway extends AbstractGateway
     {
         /** @var StatusRequest $request */
         $request = $this->createRequest(StatusRequest::class, $parameters);
+
+        return $request;
+    }
+    /**
+     * @param  array $parameters
+     * @return PaymentBrandsRequest
+     */
+    public function paymentBrands(array $parameters = [])
+    {
+        /** @var PaymentBrandsRequest $request */
+        $request = $this->createRequest(PaymentBrandsRequest::class, $parameters);
 
         return $request;
     }
