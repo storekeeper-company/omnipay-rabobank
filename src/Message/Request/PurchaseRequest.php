@@ -159,8 +159,6 @@ class PurchaseRequest extends AbstractRabobankRequest
             ];
         }
 
-        $data['signature'] = $this->generateSignature($data);
-
         return $data;
     }
 
@@ -171,35 +169,8 @@ class PurchaseRequest extends AbstractRabobankRequest
      */
     public function sendData($data)
     {
-        $response = $this->sendRequest(self::POST, '/order/server/api/order', $data);
+        $response = $this->sendRequest(self::POST, '/order/server/api/v2/order', $data);
 
         return $this->response = new PurchaseResponse($this, $response);
-    }
-
-    protected function generateSignature(array $requestData)
-    {
-        $signatureData = [
-            $requestData['timestamp'],
-            $requestData['merchantOrderId'],
-            $requestData['amount']['currency'],
-            $requestData['amount']['amount'],
-            isset($requestData['language']) ? $requestData['language'] : '',
-            isset($requestData['description']) ? $requestData['description'] : '',
-            $requestData['merchantReturnURL'],
-        ];
-
-        if (isset($requestData['shippingDetail'])) {
-            $signatureData[] = $requestData['shippingDetail'];
-        }
-
-        if (isset($requestData['paymentBrand'])) {
-            $signatureData[] = $requestData['paymentBrand'];
-        }
-
-        if (isset($requestData['paymentBrandForce'])) {
-            $signatureData[] = $requestData['paymentBrandForce'];
-        }
-
-        return $this->gateway->generateSignature($signatureData);
     }
 }

@@ -81,28 +81,6 @@ class PurchaseRequestTest extends TestCase
         ), $data['shippingDetail']);
         $this->assertEquals('IDEAL', $data['paymentBrand']);
         $this->assertEquals('FORCE_ONCE', $data['paymentBrandForce']);
-
-        $signatureData = array(
-            $data['timestamp'],
-            '6',
-            'EUR',
-            1000,
-            'EN',
-            '',
-            'https://www.example.com/return',
-            'John',
-            '',
-            'Doe',
-            'Main street 123',
-            '1234AA',
-            'Anytown',
-            'NL',
-            'IDEAL',
-            'FORCE_ONCE'
-        );
-
-        $signature = hash_hmac('sha512', implode(',', $signatureData), 'secret');
-        $this->assertEquals($signature, $data['signature']);
     }
 
     public function testBaseUrl(): void

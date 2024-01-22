@@ -26,4 +26,9 @@ class PurchaseResponse extends AbstractRabobankResponse implements RedirectRespo
     {
         return $this->data['redirectUrl'];
     }
+
+    public function getOmnikassaOrderId()
+    {
+        return $this->data['omnikassaOrderId'];
+    }
 }
