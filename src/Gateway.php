@@ -7,7 +7,9 @@ use Omnipay\Rabobank\Message\Request\CompletePurchaseRequest;
 use Omnipay\Rabobank\Message\Request\PaymentBrandsRequest;
 use Omnipay\Rabobank\Message\Request\PurchaseRequest;
 use Omnipay\Rabobank\Message\Request\StatusRequest;
+use Omnipay\Rabobank\Message\Request\WebhookRequest;
 use Omnipay\Rabobank\Message\Response\PaymentBrandsResponse;
+use Omnipay\Rabobank\Message\Response\WebhookResponse;
 
 /**
  * Rabobank Gateway
@@ -106,6 +108,17 @@ class Gateway extends AbstractGateway
         return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($data)), false);
     }
 
+    /**
+     * @param  array $parameters
+     * @return WebhookResponse
+     */
+    public function webhookResponse(array $parameters = [])
+    {
+        /** @var PurchaseRequest $request */
+        $request = $this->createRequest(WebhookRequest::class, $parameters);
+
+        return $request->send();
+    }
     /**
      * @param  array $parameters
      * @return PurchaseRequest
