@@ -8,7 +8,8 @@ use Omnipay\Rabobank\Order;
 
 class WebhookResponse extends AbstractRabobankResponse
 {
-    public function getAuthenticationToten()
+
+    public function getAuthenticationToken()
     {
         return (string) $this->data['authentication'];
     }

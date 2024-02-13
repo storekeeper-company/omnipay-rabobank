@@ -6,14 +6,19 @@ use Omnipay\Rabobank\Message\Response\WebhookResponse;
 
 class WebhookRequest extends AbstractRabobankRequest
 {
+    protected $webhookData = [];
+    public function initialize(array $parameters = array())
+    {
+        $this->webhookData = $parameters;
+        return parent::initialize($parameters);
+    }
 
     /**
      * @inheritDoc
      */
     public function getData()
     {
-        $this->validate('authentication', 'expiry', 'eventName', 'poiId');
-        return $this->getData();
+        return [];
     }
 
     /**
@@ -21,6 +26,6 @@ class WebhookRequest extends AbstractRabobankRequest
      */
     public function sendData($data)
     {
-        return new WebhookResponse($this, $this->parameters->all());
+        return new WebhookResponse($this, $this->webhookData);
     }
 }
