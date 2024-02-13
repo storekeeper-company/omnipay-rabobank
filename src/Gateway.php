@@ -8,8 +8,8 @@ use Omnipay\Rabobank\Message\Request\PaymentBrandsRequest;
 use Omnipay\Rabobank\Message\Request\PurchaseRequest;
 use Omnipay\Rabobank\Message\Request\StatusRequest;
 use Omnipay\Rabobank\Message\Request\WebhookRequest;
-use Omnipay\Rabobank\Message\Response\PaymentBrandsResponse;
 use Omnipay\Rabobank\Message\Response\WebhookResponse;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Rabobank Gateway
@@ -109,15 +109,16 @@ class Gateway extends AbstractGateway
     }
 
     /**
-     * @param  array $parameters
      * @return WebhookResponse
      */
-    public function webhookResponse(array $parameters = [])
+    public function webhookResponse(HttpRequest $request)
     {
-        /** @var PurchaseRequest $request */
-        $request = $this->createRequest(WebhookRequest::class, $parameters);
+        $contents = $request->getContent();
+        $data = json_decode($contents, true);
 
-        return $request->send();
+        $request = $this->createRequest(WebhookRequest::class, []);
+
+        return new WebhookResponse($request, $data);
     }
     /**
      * @param  array $parameters

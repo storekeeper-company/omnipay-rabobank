@@ -2,17 +2,10 @@
 
 namespace Omnipay\Rabobank\Message\Request;
 
-use Omnipay\Rabobank\Message\Response\WebhookResponse;
+use Omnipay\Rabobank\Exception\RequestCannotBeSentException;
 
 class WebhookRequest extends AbstractRabobankRequest
 {
-    protected $webhookData = [];
-    public function initialize(array $parameters = array())
-    {
-        $this->webhookData = $parameters;
-        return parent::initialize($parameters);
-    }
-
     /**
      * @inheritDoc
      */
@@ -26,6 +19,6 @@ class WebhookRequest extends AbstractRabobankRequest
      */
     public function sendData($data)
     {
-        return new WebhookResponse($this, $this->webhookData);
+        throw new RequestCannotBeSentException('This request cannot be sent, only used internally');
     }
 }

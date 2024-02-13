@@ -4,7 +4,9 @@ namespace Omnipay\Rabobank;
 
 use Omnipay\Rabobank\Message\Request\PurchaseRequest;
 use Omnipay\Rabobank\Message\Request\StatusRequest;
+use Omnipay\Rabobank\Message\Response\WebhookResponse;
 use Omnipay\Tests\GatewayTestCase;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 class GatewayTest extends GatewayTestCase
 {
@@ -29,6 +31,26 @@ class GatewayTest extends GatewayTestCase
         $this->assertInstanceOf(PurchaseRequest::class, $request);
         $this->assertSame(1000, $request->getAmountInteger());
         $this->assertSame('EUR', $request->getCurrency());
+    }
+
+    public function testWebhookResponse()
+    {
+        $authToken = 'AUTH_NOTIFICATION_JWT_TOKEN';
+        $webhook_data = [
+            'authentication' => $authToken,
+            'expiry' => date('c'),
+            'eventName' => 'merchant.order.status.changed',
+            'poiId' => 1,
+        ];
+        $webhook_data['signature'] = $this->gateway->generateSignature($webhook_data);
+
+        $psrRequest = new HttpRequest([], [], [], [], [], [], json_encode($webhook_data));
+
+        /** @var WebhookResponse $request */
+        $response = $this->gateway->webhookResponse($psrRequest);
+
+        $this->assertInstanceOf(WebhookResponse::class, $response);
+        $this->assertSame($authToken, $response->getNotificationToken());
     }
 
     public function testStatus()
