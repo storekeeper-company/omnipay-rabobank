@@ -2,8 +2,10 @@
 
 namespace Omnipay\Rabobank\Message;
 
+use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Rabobank\Gateway;
 use Omnipay\Rabobank\Message\Request\StatusRequest;
+use Omnipay\Rabobank\Message\Response\PurchaseResponse;
 use Omnipay\Rabobank\Message\Response\StatusResponse;
 use Omnipay\Rabobank\Order;
 use Omnipay\Tests\TestCase;
@@ -71,5 +73,17 @@ class StatusRequestTest extends TestCase
         ];
 
         $this->assertEquals($orderExpected, $order);
+    }
+
+
+    public function testSendFatalRabo(): void
+    {
+        $this->setMockHttpResponse('raboFatal.html');
+
+        $this->expectException(InvalidResponseException::class);
+        $this->expectExceptionMessage('RaboBank Api did not respond with valid format. '.
+            'Reference id: 18.1ef21602.1708703613.9c7aa6e');
+
+        $this->request->send();
     }
 }

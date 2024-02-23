@@ -148,7 +148,17 @@ abstract class AbstractRabobankRequest extends AbstractRequest
             ($data === null || $data === []) ? null : json_encode($data)
         );
 
-        return json_decode((string)$response->getBody(), true);
+        $body = (string)$response->getBody();
+        $json = json_decode($body, true);
+        if ($json === null) {
+            $ref = '';
+            if (preg_match('/Reference id[^<]+/m', $body, $matches)) {
+                $ref = ' '.trim($matches[0]);
+            }
+            // not a valid json response
+            throw new InvalidResponseException('RaboBank Api did not respond with valid format.'.$ref);
+        }
+        return $json;
     }
 
     protected function fetchAccessToken()
